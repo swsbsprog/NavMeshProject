@@ -11,7 +11,7 @@ public class OffsetFollow : MonoBehaviour
         offset = target.position
             - transform.position;
         // a = b - c
-        // c = a - b
+        // c = b - a
     }
     void Update()
     {
