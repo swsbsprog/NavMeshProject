@@ -20,6 +20,7 @@ public class Bullet : MonoBehaviour
             return;
 
         zombie.OnDamage(power);
+        zombie.InstantiateDamageEffect(transform);
         Destroy(gameObject);
 
         Debug.LogWarning("todo:피격 이펙트 표시");

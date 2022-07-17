@@ -831,6 +831,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31037485bedc90d4888bcd0635644413, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hp: 100
+  attackedEffectGo: {fileID: 4369318754628393421, guid: 7f7f3967710489e4d98a37fa772bda08, type: 3}
   state: 0
 --- !u!135 &6023048097743970163
 SphereCollider:

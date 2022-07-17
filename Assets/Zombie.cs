@@ -25,22 +25,57 @@ public class Zombie : MonoBehaviour
     }
 
     public int hp = 100;
+    public GameObject attackedEffectGo;
     internal void OnDamage(int damange)
     {
         hp -= damange;
         if (hp <= 0)
         {
             state = Zombie.ZombieStateType.Die;
-            Destroy(gameObject);
+            // todo: 죽는 모션 하고
+            animator.SetTrigger("Death");
+            Destroy(gameObject, 1f);
         }
     }
 
+    internal void InstantiateDamageEffect(Transform bulletTransform)
+    {
+        InstantiateAttackedEffect();
+
+        // 경직 -> 피격 모션, 뒤로 밀림.
+        StartCoroutine(AttackedMotionPlayCo(0.1f));
+    }
+
+
+    [SerializeField] float attackedMoveBack = 0.1f;
+    private IEnumerator AttackedMotionPlayCo(float stopTime)
+    {
+        animator.SetTrigger("Attacked");
+        transform.position -= transform.forward * attackedMoveBack; // 살짝 뒤로밀림
+        var originalSpeed = agent.speed;
+        agent.speed = 0;
+        yield return new WaitForSeconds(stopTime);
+        agent.speed = originalSpeed;
+    }
+
+    private void InstantiateAttackedEffect()
+    {
+        var newEffect = Instantiate(attackedEffectGo);
+        var pos = transform.position;
+        pos.y = 1;
+        newEffect.transform.position = pos;
+        newEffect.transform.forward = transform.forward;
+    }
+
     public ZombieStateType state;
+    Animator animator;
+    NavMeshAgent agent;
+
     IEnumerator Start()
     {
         Zombies.Add(this);
-        NavMeshAgent agent = GetComponent<NavMeshAgent>();
-        Animator animator = GetComponent<Animator>();
+        agent = GetComponent<NavMeshAgent>();
+        animator = GetComponent<Animator>();
         state = ZombieStateType.Run;
         while (true)
         {
