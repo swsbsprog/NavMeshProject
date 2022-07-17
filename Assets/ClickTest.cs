@@ -1,13 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class ClickTest : MonoBehaviour
 {
     public Transform pointer;
-    
+    public NavMeshAgent agent;
+    private void Start()
+    {
+        agent = GetComponent<NavMeshAgent>();
+    }
 
-    // Update is called once per frame
     void Update()
     {
         if(Input.GetMouseButtonDown(0))
@@ -16,7 +20,8 @@ public class ClickTest : MonoBehaviour
             if (Physics.Raycast(ray, out RaycastHit hitInfo)) // Physics물리 -> 충돌 영역 필요
             {
                 print(hitInfo.point);
-                pointer.position = hitInfo.point;
+                //pointer.position = hitInfo.point;
+                agent.destination = hitInfo.point;
             }
         }
     }
