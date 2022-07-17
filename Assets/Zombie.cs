@@ -7,17 +7,34 @@ using UnityEngine.AI;
 public class Zombie : MonoBehaviour
 {
     static public List<Zombie> Zombies = new();
+#if UNITY_EDITOR
+
+    [UnityEditor.InitializeOnEnterPlayMode]
+    static void OnEnterPlaymodeInEditor(UnityEditor.EnterPlayModeOptions options)
+    {
+        Zombies = new();
+    }
+#endif
+
+    public enum ZombieStateType
+    {
+        Idle,
+        Run,
+        Die,
+    }
+    public ZombieStateType state;
     IEnumerator Start()
     {
         Zombies.Add(this);
         NavMeshAgent agent = GetComponent<NavMeshAgent>();
         Animator animator = GetComponent<Animator>();
+        state = ZombieStateType.Run;
         while (true)
         {
+            if (state == ZombieStateType.Die)
+                yield break;
             agent.destination = Player.instance.transform.position;
-
             yield return null;
-
             animator.SetFloat("AgentSpeed", agent.velocity.magnitude);
         }
     }

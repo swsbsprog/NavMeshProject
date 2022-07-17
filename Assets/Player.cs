@@ -31,11 +31,12 @@ public class Player : MonoBehaviour
         animator.SetFloat("AgentSpeed", agentSpeed); //agentSpeed 0.1크면 run 아니면 idle
 
         // 멈췄을때 가장 근처의 좀비에게 총알 발사.
-        if(agentSpeed > 0 && ingFire == false)
+        if(agentSpeed == 0 && ingFire == false)
         {
             StartCoroutine(FireBulletCo());
         }
     }
+
 
     public bool ingFire; // 발사중일땐 true
     public float fireTime = 0.5f;
@@ -52,8 +53,6 @@ public class Player : MonoBehaviour
         {
             // 2. 가장 가까운 좀비로 바라보기
             transform.LookAt(nearnestZombie.transform);
-
-            Destroy(nearnestZombie.gameObject);
         }
 
         // 3. 발사 애니메이션 재생.
@@ -64,8 +63,15 @@ public class Player : MonoBehaviour
 
         ingFire = false;
     }
+    public GameObject bulletGo;
+    public Vector3 gunOffset = new Vector3(0, 1, 0.5f);
+
     private void FireBullet()
     {
-        //throw new NotImplementedException();
+        var newBulletGo = Instantiate(bulletGo, transform);
+        newBulletGo.transform.localPosition = gunOffset;
+        newBulletGo.transform.parent = null;
+
+        newBulletGo.transform.rotation = transform.rotation;
     }
 }
