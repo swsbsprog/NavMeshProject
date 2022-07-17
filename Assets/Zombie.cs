@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -22,6 +23,18 @@ public class Zombie : MonoBehaviour
         Run,
         Die,
     }
+
+    public int hp = 100;
+    internal void OnDamage(int damange)
+    {
+        hp -= damange;
+        if (hp <= 0)
+        {
+            state = Zombie.ZombieStateType.Die;
+            Destroy(gameObject);
+        }
+    }
+
     public ZombieStateType state;
     IEnumerator Start()
     {

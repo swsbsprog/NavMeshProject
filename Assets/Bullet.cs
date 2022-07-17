@@ -5,6 +5,7 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     public float speed = 5f;
+    public int power = 10;
 
     void Update()
     {
@@ -18,7 +19,9 @@ public class Bullet : MonoBehaviour
         if(zombie == null)
             return;
 
-        zombie.state = Zombie.ZombieStateType.Die;
-        Destroy(zombie.gameObject);
+        zombie.OnDamage(power);
+        Destroy(gameObject);
+
+        Debug.LogWarning("todo:피격 이펙트 표시");
     }
 }
