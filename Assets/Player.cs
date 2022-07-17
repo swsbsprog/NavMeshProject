@@ -5,6 +5,7 @@ using UnityEngine.AI;
 
 public class Player : MonoBehaviour
 {
+    static public Player instance;
     public NavMeshAgent agent;
     public float agentSpeed;
     public Animator animator;
@@ -13,10 +14,11 @@ public class Player : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
     }
-    // 이동중에는 run애니메이션, 가만히있을땐 idle 애니메이션 재생
+    private void Awake() => instance = this;
+    private void OnDestroy() => instance = null;
     void Update()
-    {
-        if (Input.GetMouseButtonDown(0))
+    {   
+        if (Input.GetMouseButtonDown(0)) // Input.GetKeyDown(KeyCode.Mouse0)동일
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hitInfo)) // Physics물리 -> 충돌 영역 필요
